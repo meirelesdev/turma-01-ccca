@@ -22,7 +22,7 @@ export default class EnrollStudentUsecase {
 
     if (student.getAge() < module.minimumAge) throw new Error("Student below minimum age")
     const studentsEnrolledInclass = this.enrollmentRepository.findAllByClass(level.code, module.code, classroom.code)
-    if (studentsEnrolledInclass.length >= classroom.capacity) throw new Error("Class is over capacity");
+    if (studentsEnrolledInclass.length >= classroom.capacity) throw new Error("Classroom is over capacity");
     const existingEnrollment = this.enrollmentRepository.getByCpf(input.student.cpf)
     if (existingEnrollment) throw new Error("Enrollment with duplicated student is not allowed");
 

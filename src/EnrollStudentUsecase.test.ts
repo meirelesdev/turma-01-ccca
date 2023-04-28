@@ -119,5 +119,5 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
     class: "A"
   }
 
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Class is over capacity"));
+  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Classroom is over capacity"));
 })
