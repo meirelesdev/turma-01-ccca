@@ -1,7 +1,19 @@
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
+import EnrollmentRepositoryMemory from "./EnrollmentRepositoryMemory";
+import LevelRepositoryMemory from "./LevelRepositoryMemory";
+import ModuleRepositoryMemory from "./ModuleRepositoryMemory";
+import ClassRepositoryMemory from "./ClassRepositoryMemory";
 
+let enrollStudentUsecase: EnrollStudentUsecase;
+
+beforeEach(() => {
+  const enrollmentRepository = new EnrollmentRepositoryMemory();
+  const levelRepository = new LevelRepositoryMemory()
+  const moduleRepository = new ModuleRepositoryMemory()
+  const classRepository = new ClassRepositoryMemory()
+  enrollStudentUsecase = new EnrollStudentUsecase(levelRepository, moduleRepository, classRepository, enrollmentRepository);
+})
 test("Não deve matricular sem um nome de estudante válido", async function () {
-  const enrollStudentUsecase = new EnrollStudentUsecase();
   const enrollmentRequest = {
     student: {
       name: 'Ana'
@@ -14,7 +26,6 @@ test("Não deve matricular sem um nome de estudante válido", async function () 
 });
 
 test("Não deve matricular sem um cpf de estudante válido", async function () {
-  const enrollStudentUsecase = new EnrollStudentUsecase();
   const enrollmentRequest = {
     student: {
       name: 'Ana Silva',
@@ -28,7 +39,6 @@ test("Não deve matricular sem um cpf de estudante válido", async function () {
 });
 
 test("Não deve matricular um aluno duplicado", () => {
-  const enrollStudentUsecase = new EnrollStudentUsecase();
   const enrollmentRequest = {
     student: {
       name: "Ana Maria",
@@ -43,7 +53,6 @@ test("Não deve matricular um aluno duplicado", () => {
 })
 
 test("Deve gerar o código de matrícula", () => {
-  const enrollStudentUsecase = new EnrollStudentUsecase();
   const enrollmentRequest = {
     student: {
       name: "Maria Carolina Fonseca",
@@ -59,7 +68,6 @@ test("Deve gerar o código de matrícula", () => {
 })
 
 test("Não deve matricular aluno abaixo da idade minima", () => {
-  const enrollStudentUsecase = new EnrollStudentUsecase();
   const enrollmentRequest = {
     student: {
       name: "Maria Carolina Fonseca",
@@ -75,7 +83,6 @@ test("Não deve matricular aluno abaixo da idade minima", () => {
 })
 
 test("Não deve matricular aluno fora da capacidade da turma", () => {
-  const enrollStudentUsecase = new EnrollStudentUsecase();
   const enrollmentRequestArray = [
     {
       student: {

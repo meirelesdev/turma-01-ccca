@@ -4,8 +4,13 @@ import Cpf from './Cpf'
 export default class Student {
   name: Name;
   cpf: Cpf;
-  constructor(name: string, cpf: string) {
+  birthDate: Date;
+  constructor(name: string, cpf: string, birthDate: string) {
     this.name = new Name(name)
     this.cpf = new Cpf(cpf)
+    this.birthDate = new Date(birthDate);
+  }
+  getAge(): number {
+    return (new Date().getFullYear() - this.birthDate.getFullYear())
   }
 }
