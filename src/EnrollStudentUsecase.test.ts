@@ -105,7 +105,7 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
     }]
 
   for (const enrollmentReq of enrollmentRequestArray) {
-    enrollStudentUsecase.execute(enrollmentReq)
+    enrollStudentUsecase.execute(enrollmentReq);
   }
 
   const enrollmentRequest = {
@@ -118,5 +118,6 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
     module: "1",
     class: "A"
   }
+
   expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Class is over capacity"));
 })
