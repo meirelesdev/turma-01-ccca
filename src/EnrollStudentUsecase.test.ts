@@ -2,7 +2,7 @@ import EnrollStudentUsecase from "./EnrollStudentUsecase";
 import EnrollmentRepositoryMemory from "./EnrollmentRepositoryMemory";
 import LevelRepositoryMemory from "./LevelRepositoryMemory";
 import ModuleRepositoryMemory from "./ModuleRepositoryMemory";
-import ClassRepositoryMemory from "./ClassRepositoryMemory";
+import ClassroomRepositoryMemory from "./ClassroomRepositoryMemory";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
 
@@ -10,8 +10,8 @@ beforeEach(() => {
   const enrollmentRepository = new EnrollmentRepositoryMemory();
   const levelRepository = new LevelRepositoryMemory()
   const moduleRepository = new ModuleRepositoryMemory()
-  const classRepository = new ClassRepositoryMemory()
-  enrollStudentUsecase = new EnrollStudentUsecase(levelRepository, moduleRepository, classRepository, enrollmentRepository);
+  const classroomRepository = new ClassroomRepositoryMemory()
+  enrollStudentUsecase = new EnrollStudentUsecase(levelRepository, moduleRepository, classroomRepository, enrollmentRepository);
 })
 test("Não deve matricular sem um nome de estudante válido", async function () {
   const enrollmentRequest = {

@@ -1,6 +1,6 @@
-import ClassRepository from "./ClassRepository";
+import ClassroomRepository from "./ClassroomRepository";
 
-export default class ClassRepositoryMemory implements ClassRepository {
+export default class ClassroomRepositoryMemory implements ClassroomRepository {
   classes: any[];
 
   constructor() {
@@ -32,8 +32,8 @@ export default class ClassRepositoryMemory implements ClassRepository {
     ];
   }
   findByCode(code: string) {
-    const clazz = this.classes.find(clazz => clazz.code === code);
-    if (!clazz) throw new Error('Class not found');
-    return clazz;
+    const classroom = this.classes.find(classroom => classroom.code === code);
+    if (!classroom) throw new Error('Class not found');
+    return classroom;
   }
 }
