@@ -1,14 +1,13 @@
 import Period from "./Period";
 
-type ClassroomProps =
-  {
-    level: string;
-    module: string;
-    code: string;
-    capacity: number;
-    startDate: Date;
-    endDate: Date;
-  }
+type ClassroomProps = {
+  level: string;
+  module: string;
+  code: string;
+  capacity: number;
+  startDate: Date;
+  endDate: Date;
+};
 
 export default class Classroom {
   level: string;

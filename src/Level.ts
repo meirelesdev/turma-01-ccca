@@ -1,4 +1,4 @@
-type LevelProps = { code: string, description: string }
+type LevelProps = { code: string; description: string };
 
 export default class Level {
   code: string;

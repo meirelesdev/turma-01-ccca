@@ -4,7 +4,7 @@ type ModuleProps = {
   description: string;
   minimumAge: number;
   price: number;
-}
+};
 
 export default class Module {
   price: number;
@@ -13,13 +13,7 @@ export default class Module {
   description: string;
   minimumAge: number;
 
-  constructor({
-    level,
-    code,
-    description,
-    minimumAge,
-    price,
-  }: ModuleProps) {
+  constructor({ level, code, description, minimumAge, price }: ModuleProps) {
     this.level = level;
     this.code = code;
     this.description = description;

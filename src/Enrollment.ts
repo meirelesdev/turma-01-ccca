@@ -13,7 +13,7 @@ type EnrollmentProps = {
   issueDate: Date;
   sequence: number;
   installments: number;
-}
+};
 
 export default class Enrollment {
   student: Student;
@@ -25,9 +25,17 @@ export default class Enrollment {
   installments: number;
   issueDate: Date;
   invoices: Invoice[];
-  constructor({ student, level, module, classroom, issueDate, sequence, installments = 12 }: EnrollmentProps) {
+  constructor({
+    student,
+    level,
+    module,
+    classroom,
+    issueDate,
+    sequence,
+    installments = 12,
+  }: EnrollmentProps) {
     if (student.getAge() < module.minimumAge) throw new Error("Student below minimum age");
-    if (classroom.isFinished(issueDate)) throw new Error("Class is already finished")
+    if (classroom.isFinished(issueDate)) throw new Error("Class is already finished");
     if (classroom.getProgress(issueDate) > 25) throw new Error("Class is already started");
     this.student = student;
     this.level = level;
@@ -43,7 +51,12 @@ export default class Enrollment {
   generateInvoices() {
     let installmentAmoun = Math.trunc((this.module.price / this.installments) * 100) / 100;
     for (let i = 0; i < this.installments; i++) {
-      const invoice = new Invoice(this.code.value, i, this.issueDate.getFullYear(), installmentAmoun);
+      const invoice = new Invoice(
+        this.code.value,
+        i,
+        this.issueDate.getFullYear(),
+        installmentAmoun
+      );
       this.invoices.push(invoice);
     }
 

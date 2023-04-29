@@ -7,19 +7,17 @@ export default class ClassroomRepositoryMemory implements ClassroomRepository {
   constructor() {
     const start1 = new Date();
     const end1 = new Date();
-    end1.setMonth(end1.getMonth() + 6)
+    end1.setMonth(end1.getMonth() + 6);
 
     const start2 = new Date();
-    start2.setMonth(start2.getMonth() - 2)
+    start2.setMonth(start2.getMonth() - 2);
     const end2 = new Date();
-    end2.setMonth(end2.getMonth() - 1)
-
+    end2.setMonth(end2.getMonth() - 1);
 
     const start3 = new Date();
-    start3.setMonth(start3.getMonth() - 6)
+    start3.setMonth(start3.getMonth() - 6);
     const end3 = new Date();
-    end3.setMonth(end3.getMonth() + 3)
-
+    end3.setMonth(end3.getMonth() + 3);
 
     this.classes = [
       new Classroom({
@@ -45,12 +43,12 @@ export default class ClassroomRepositoryMemory implements ClassroomRepository {
         capacity: 2,
         startDate: start3,
         endDate: end3,
-      })
+      }),
     ];
   }
   findByCode(code: string) {
-    const classroom = this.classes.find(classroom => classroom.code === code);
-    if (!classroom) throw new Error('Class not found');
+    const classroom = this.classes.find((classroom) => classroom.code === code);
+    if (!classroom) throw new Error("Class not found");
     return classroom;
   }
 }

@@ -30,7 +30,7 @@ export default class Cpf {
 
   isBlocked(cpf: string): boolean {
     const [digit1] = cpf;
-    return cpf.split("").every(digit => digit === digit1);
+    return cpf.split("").every((digit) => digit === digit1);
   }
 
   calculateDigit(cpf: string, factor: number, max: number): number {
@@ -38,11 +38,11 @@ export default class Cpf {
     for (const digit of this.toDigitArray(cpf).slice(0, max)) {
       total += digit * factor--;
     }
-    return (total % 11 < 2) ? 0 : (11 - total % 11);
+    return total % 11 < 2 ? 0 : 11 - (total % 11);
   }
 
   toDigitArray(cpf: string): number[] {
-    return [...cpf].map(digit => parseInt(digit));
+    return [...cpf].map((digit) => parseInt(digit));
   }
 
   getCheckDigit(cpf: string): string {

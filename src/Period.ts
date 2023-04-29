@@ -1,7 +1,7 @@
 type PeriodProps = {
-  start: Date,
-  end: Date,
-}
+  start: Date;
+  end: Date;
+};
 export default class Period {
   start: Date;
   end: Date;
