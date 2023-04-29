@@ -13,25 +13,22 @@ export default class EnrollStudentUsecase {
     public enrollmentRepository: EnrollmentRepository
   ) { }
 
-  execute(input: any): { student: Student, code: string } {
-    const student = new Student(input.student.name, input.student.cpf, input.student.birthDate);
-
+  execute(input: any): Enrollment {
+    const student = new Student(input.student);
     const level = this.levelRepository.findByCode(input.level);
     const module = this.moduleRepository.findByLevelAndCode(input.level, input.module);
-    const classroom = this.classroomRepository.findByCode(input.class)
-
-    if (student.getAge() < module.minimumAge) throw new Error("Student below minimum age")
+    const classroom = this.classroomRepository.findByCode(input.class);
     const studentsEnrolledInclass = this.enrollmentRepository.findAllByClass(level.code, module.code, classroom.code)
-    if (studentsEnrolledInclass.length >= classroom.capacity) throw new Error("Classroom is over capacity");
+    if (studentsEnrolledInclass.length >= classroom.capacity) throw new Error("Class is over capacity");
     const existingEnrollment = this.enrollmentRepository.getByCpf(input.student.cpf)
     if (existingEnrollment) throw new Error("Enrollment with duplicated student is not allowed");
-
-    const enrollmentDate = new Date();
-    const sequence = new String(this.enrollmentRepository.count() + 1).padStart(4, "0");
-    const code = `${enrollmentDate.getFullYear()}${level.code}${module.code}${classroom.code}${sequence}`;
-
-    const enrollment = new Enrollment(student, level.code, module.code, classroom.code, code);
+    const enrollmentSequence = this.enrollmentRepository.count() + 1;
+    const issueDate = new Date();
+    const enrollment = new Enrollment({ student, level, module, classroom, issueDate, sequence: enrollmentSequence, installments: input.installments });
     this.enrollmentRepository.save(enrollment)
+
+
+
     return enrollment
   }
 }

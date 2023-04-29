@@ -1,34 +1,51 @@
+import Classroom from "./Classroom";
 import ClassroomRepository from "./ClassroomRepository";
 
 export default class ClassroomRepositoryMemory implements ClassroomRepository {
-  classes: any[];
+  classes: Classroom[];
 
   constructor() {
+    const start1 = new Date();
+    const end1 = new Date();
+    end1.setMonth(end1.getMonth() + 6)
+
+    const start2 = new Date();
+    start2.setMonth(start2.getMonth() - 2)
+    const end2 = new Date();
+    end2.setMonth(end2.getMonth() - 1)
+
+
+    const start3 = new Date();
+    start3.setMonth(start3.getMonth() - 6)
+    const end3 = new Date();
+    end3.setMonth(end3.getMonth() + 3)
+
+
     this.classes = [
-      {
+      new Classroom({
         level: "EM",
         module: "3",
         code: "A",
         capacity: 2,
-        start_date: "2021-06-01",
-        end_date: "2021-12-15",
-      },
-      {
+        startDate: start1,
+        endDate: end1,
+      }),
+      new Classroom({
         level: "EM",
         module: "3",
-        code: "A",
-        capacity: 10,
-        start_date: "2021-05-01",
-        end_date: "2021-05-30",
-      },
-      {
+        code: "B",
+        capacity: 2,
+        startDate: start2,
+        endDate: end2,
+      }),
+      new Classroom({
         level: "EM",
         module: "3",
-        code: "A",
-        capacity: 10,
-        start_date: "2021-05-01",
-        end_date: "2021-06-30",
-      }
+        code: "C",
+        capacity: 2,
+        startDate: start3,
+        endDate: end3,
+      })
     ];
   }
   findByCode(code: string) {

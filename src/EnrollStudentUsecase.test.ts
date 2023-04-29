@@ -64,7 +64,7 @@ test("Deve gerar o código de matrícula", () => {
   }
   const enrollment = enrollStudentUsecase.execute(enrollmentRequest)
 
-  expect(enrollment.code).toBe(`${new Date().getFullYear()}EM1A0001`);
+  expect(enrollment.code.value).toBe(`${new Date().getFullYear()}EM1A0001`);
 })
 
 test("Não deve matricular aluno abaixo da idade minima", () => {
@@ -119,5 +119,57 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
     class: "A"
   }
 
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Classroom is over capacity"));
+  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Class is over capacity"));
+})
+
+test("Não deve matricular aluno apos o termino da turma", () => {
+
+  const enrollmentRequest = {
+    student: {
+      name: "Ana Maria",
+      cpf: "297.788.214-61",
+      birthDate: "2002-03-12"
+    },
+    level: "EM",
+    module: "1",
+    class: "B"
+  };
+
+  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Class is already finished"));
+})
+
+test("Não deve matricular aluno apos 25% do inicio da turma", () => {
+
+  const enrollmentRequest = {
+    student: {
+      name: "Ana Maria",
+      cpf: "297.788.214-61",
+      birthDate: "2002-03-12"
+    },
+    level: "EM",
+    module: "1",
+    class: "C"
+  };
+
+  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Class is already started"));
+})
+
+test("Deve gerar faturas", () => {
+
+  const enrollmentRequest = {
+    student: {
+      name: "Ana Maria",
+      cpf: "297.788.214-61",
+      birthDate: "2002-03-12"
+    },
+    level: "EM",
+    module: "1",
+    class: "A",
+    installments: 12
+  };
+  const enrollment = enrollStudentUsecase.execute(enrollmentRequest)
+
+  expect(enrollment.invoices).toHaveLength(12)
+  expect(enrollment.invoices[0].amount).toBe(1416.66)
+  expect(enrollment.invoices[11].amount).toBe(1416.73)
 })
