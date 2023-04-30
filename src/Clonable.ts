@@ -1,3 +1,3 @@
 export default interface Clonable {
-  clone(): any;
+  clone(): object;
 }

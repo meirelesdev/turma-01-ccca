@@ -6,6 +6,10 @@ export default class EnrollmentRepositoryMemory implements EnrollmentRepository 
   constructor() {
     this.enrollments = [];
   }
+  get(code: string): Enrollment | undefined {
+    const enrollment = this.enrollments.find((enrollment) => enrollment.code.value === code);
+    return enrollment;
+  }
   save(enrollment: Enrollment): void {
     this.enrollments.push(enrollment);
   }
