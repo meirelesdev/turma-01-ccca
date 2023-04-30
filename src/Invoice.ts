@@ -1,4 +1,6 @@
-export default class Invoice {
+import Clonable from "./Clonable";
+
+export default class Invoice implements Clonable {
   code: string;
   month: number;
   year: number;
@@ -8,5 +10,9 @@ export default class Invoice {
     this.month = month;
     this.year = year;
     this.amount = amount;
+  }
+
+  clone() {
+    return JSON.parse(JSON.stringify(this));
   }
 }
