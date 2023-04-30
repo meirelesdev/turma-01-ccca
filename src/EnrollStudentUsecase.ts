@@ -3,15 +3,21 @@ import Enrollment from "./Enrollment";
 import EnrollmentRepository from "./EnrollmentRepository";
 import LevelRepository from "./LevelRepository";
 import ModuleRepository from "./ModuleRepository";
+import RepositoryAbastractFactory from "./RepositoryAbastractFactory";
 import Student from "./Student";
 
 export default class EnrollStudentUsecase {
-  constructor(
-    public levelRepository: LevelRepository,
-    public moduleRepository: ModuleRepository,
-    public classroomRepository: classroomRepository,
-    public enrollmentRepository: EnrollmentRepository
-  ) {}
+  public levelRepository: LevelRepository;
+  public moduleRepository: ModuleRepository;
+  public classroomRepository: classroomRepository;
+  public enrollmentRepository: EnrollmentRepository;
+
+  constructor(repositoryFactory: RepositoryAbastractFactory) {
+    this.levelRepository = repositoryFactory.createLevelRepository();
+    this.moduleRepository = repositoryFactory.createModuleRepository();
+    this.classroomRepository = repositoryFactory.createClassroomRepository();
+    this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
+  }
 
   execute(input: any): Enrollment {
     const student = new Student(input.student);
