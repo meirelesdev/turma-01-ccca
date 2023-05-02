@@ -25,7 +25,9 @@ export default class Enrollment {
   sequence: number;
   installments: number;
   issueDate: Date;
+  status: string;
   invoices: Invoice[];
+
   constructor({
     student,
     level,
@@ -47,32 +49,29 @@ export default class Enrollment {
     this.issueDate = issueDate;
     this.code = new EnrollmentCode(level.code, module.code, classroom.code, issueDate, sequence);
     this.invoices = [];
+    this.status = "active";
     this.generateInvoices();
   }
-  generateInvoices() {
-    let installmentAmoun = Math.trunc((this.module.price / this.installments) * 100) / 100;
-    for (let i = 0; i < this.installments; i++) {
-      const invoice = new Invoice(
-        this.code.value,
-        i,
-        this.issueDate.getFullYear(),
-        installmentAmoun
-      );
-      this.invoices.push(invoice);
-    }
 
+  generateInvoices() {
+    let installmentAmount = Math.trunc((this.module.price / this.installments) * 100) / 100;
+    for (let i = 1; i <= this.installments; i++) {
+      this.invoices.push(
+        new Invoice(this.code.value, i, this.issueDate.getFullYear(), installmentAmount)
+      );
+    }
     const total = this.invoices.reduce((total, invoice) => {
       total += invoice.amount;
       return total;
     }, 0);
-
     const rest = Math.trunc((this.module.price - total) * 100) / 100;
-    this.invoices[this.installments - 1].amount = installmentAmoun + rest;
+    this.invoices[this.installments - 1].amount = installmentAmount + rest;
   }
 
   getInvoiceBalance() {
     return this.invoices.reduce((total, invoice) => {
-      return total + invoice.getBalance();
+      total += invoice.getBalance();
+      return total;
     }, 0);
   }
 
@@ -83,11 +82,15 @@ export default class Enrollment {
     return invoice;
   }
 
-  payInvoice(month: number, year: number, amount: number): Invoice | undefined {
+  payInvoice(month: number, year: number, amount: number, paymentDate: Date): void {
     const invoice = this.getInvoice(month, year);
     if (!invoice) throw new Error(`Invoice not found`);
+    if (invoice.getStatus(paymentDate) === "overdue") {
+      const penalty = invoice.getPenalty(paymentDate);
+      const interests = invoice.getInterests(paymentDate);
+      invoice.addEvent(new InvoiceEvent("penalty", penalty));
+      invoice.addEvent(new InvoiceEvent("interests", interests));
+    }
     invoice.addEvent(new InvoiceEvent("payment", amount));
-    invoice.getBalance();
-    return invoice;
   }
 }

@@ -3,9 +3,12 @@ import EnrollStudentUsecase from "./EnrollStudentUsecase";
 import RepositoryMemoryFactory from "./RepositoryMemoryFactory";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
+let year: number;
 
 beforeEach(() => {
   enrollStudentUsecase = new EnrollStudentUsecase(new RepositoryMemoryFactory());
+  const currentDate = new Date();
+  year = currentDate.getFullYear();
 });
 
 test("Não deve matricular sem um nome de estudante válido", () => {
@@ -64,7 +67,7 @@ test("Deve gerar o código de matrícula", () => {
   });
   const enrollment = enrollStudentUsecase.execute(enrollmentRequest);
 
-  expect(enrollment.code).toBe(`${new Date().getFullYear()}EM1A0001`);
+  expect(enrollment.code).toBe(`${year}EM1A0001`);
 });
 
 test("Não deve matricular aluno abaixo da idade minima", () => {

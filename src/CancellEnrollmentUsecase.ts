@@ -1,17 +1,16 @@
 import EnrollmentRepository from "./EnrollmentRepository";
-import { PayInvoiceInputDTO } from "./PayInvoiceDTO";
 import RepositoryAbastractFactory from "./RepositoryAbastractFactory";
 
-export default class PayInvoiceUsecase {
+export default class CancellEnrollmentUsecase {
   public enrollmentRepository: EnrollmentRepository;
 
   constructor(repositoryFactory: RepositoryAbastractFactory) {
     this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
   }
 
-  execute(input: PayInvoiceInputDTO): void {
-    const enrollment = this.enrollmentRepository.get(input.code);
+  execute(code: string): void {
+    const enrollment = this.enrollmentRepository.get(code);
     if (!enrollment) throw new Error(`Enrollment not found`);
-    enrollment.payInvoice(input.month, input.year, input.amount, input.paymentDate);
+    enrollment.status = "cancelled";
   }
 }

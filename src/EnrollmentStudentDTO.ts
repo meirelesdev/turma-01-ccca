@@ -35,7 +35,7 @@ export class EnrollmentStudentInputDTO {
 
 export class EnrollmentStudentOutputDTO {
   code: string;
-  invoices: object[];
+  invoices: any[];
   constructor(code: string) {
     this.code = code;
     this.invoices = [];
