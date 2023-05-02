@@ -1,5 +1,5 @@
-import Module from "../../entity/Module";
-import ModuleRepository from "../ModuleRepository";
+import Module from "../../../domain/entity/Module";
+import ModuleRepository from "../../../domain/repository/ModuleRepository";
 
 export default class ModuleRepositoryMemory implements ModuleRepository {
   modules: Module[];
@@ -92,9 +92,9 @@ export default class ModuleRepositoryMemory implements ModuleRepository {
       }),
     ];
   }
-  findByLevelAndCode(level: string, code: string) {
+  async findByLevelAndCode(level: string, code: string): Promise<Module> {
     const module = this.modules.find((module) => module.level === level && module.code === code);
     if (!module) throw new Error("Module not found");
-    return module;
+    return Promise.resolve(module);
   }
 }

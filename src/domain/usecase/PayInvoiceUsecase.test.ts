@@ -1,4 +1,4 @@
-import RepositoryMemoryFactory from "../repository/repositoryMemory/RepositoryMemoryFactory";
+import RepositoryMemoryFactory from "../../adapter/factory/RepositoryMemoryFactory";
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
 import GetEnrollmentUsecase from "./GetEnrollmentUsecase";
 import PayInvoiceUsecase from "./PayInvoiceUsecase";
@@ -17,7 +17,7 @@ beforeEach(() => {
   year = currentDate.getFullYear();
 });
 
-test("Deve pagar uma fatura", () => {
+test("Deve pagar uma fatura", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -27,7 +27,7 @@ test("Deve pagar uma fatura", () => {
     classroom: "A",
     installments: 12,
   };
-  enrollStudentUsecase.execute(enrollmentRequest);
+  await enrollStudentUsecase.execute(enrollmentRequest);
   const input = {
     code: `${year}EM1A0001`,
     month: 8,
@@ -36,14 +36,17 @@ test("Deve pagar uma fatura", () => {
     paymentDate: new Date(`${year}-06-20`),
   };
 
-  payInvoice.execute(input);
-  const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
+  await payInvoice.execute(input);
+  const enrollmentOutput = await getEnrollment.execute(
+    `${year}EM1A0001`,
+    new Date(`${year}-06-20`)
+  );
 
   expect(enrollmentOutput.code).toBe(`${year}EM1A0001`);
   expect(enrollmentOutput.invoices[7].balance).toBe(0);
 });
 
-test("Deve pagar uma fatura vencida", () => {
+test("Deve pagar uma fatura vencida", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -53,7 +56,7 @@ test("Deve pagar uma fatura vencida", () => {
     classroom: "A",
     installments: 12,
   };
-  const enrollment = enrollStudentUsecase.execute(enrollmentRequest);
+  const enrollment = await enrollStudentUsecase.execute(enrollmentRequest);
 
   const input = {
     code: enrollment.code,
@@ -62,8 +65,8 @@ test("Deve pagar uma fatura vencida", () => {
     amount: 3895.82,
     paymentDate: new Date(`${year}-06-20`),
   };
-  payInvoice.execute(input);
-  const enrollmentOutput = getEnrollment.execute(input.code, new Date(`${year}-06-20`));
+  await payInvoice.execute(input);
+  const enrollmentOutput = await getEnrollment.execute(input.code, new Date(`${year}-06-20`));
   expect(enrollmentOutput.code).toBe(input.code);
 
   expect(enrollmentOutput.invoices[0].balance).toBe(0);

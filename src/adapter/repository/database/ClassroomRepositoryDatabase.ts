@@ -1,7 +1,7 @@
-import Classroom from "../../entity/Classroom";
-import ClassroomRepository from "../ClassroomRepository";
+import Classroom from "../../../domain/entity/Classroom";
+import ClassroomRepository from "../../../domain/repository/ClassroomRepository";
 
-export default class ClassroomRepositoryMemory implements ClassroomRepository {
+export default class ClassroomRepositoryDatabase implements ClassroomRepository {
   classes: Classroom[];
 
   constructor() {
@@ -46,9 +46,9 @@ export default class ClassroomRepositoryMemory implements ClassroomRepository {
       }),
     ];
   }
-  findByCode(code: string) {
+  findByCode(code: string): Promise<Classroom> {
     const classroom = this.classes.find((classroom) => classroom.code === code);
     if (!classroom) throw new Error("Class not found");
-    return classroom;
+    return Promise.resolve(classroom);
   }
 }

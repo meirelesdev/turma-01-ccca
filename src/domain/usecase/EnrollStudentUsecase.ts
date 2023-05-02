@@ -20,25 +20,25 @@ export default class EnrollStudentUsecase {
     this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
   }
 
-  execute(input: EnrollmentStudentInputDTO): EnrollmentStudentOutputDTO {
+  async execute(input: EnrollmentStudentInputDTO): Promise<EnrollmentStudentOutputDTO> {
     const student = new Student({
       name: input.studentName,
       cpf: input.studentCpf,
       birthDate: input.studentBirthDate,
     });
-    const level = this.levelRepository.findByCode(input.level);
-    const module = this.moduleRepository.findByLevelAndCode(input.level, input.module);
-    const classroom = this.classroomRepository.findByCode(input.classroom);
-    const studentsEnrolledInclass = this.enrollmentRepository.findAllByClass(
+    const level = await this.levelRepository.findByCode(input.level);
+    const module = await this.moduleRepository.findByLevelAndCode(input.level, input.module);
+    const classroom = await this.classroomRepository.findByCode(input.classroom);
+    const studentsEnrolledInclass = await this.enrollmentRepository.findAllByClass(
       level.code,
       module.code,
       classroom.code
     );
     if (studentsEnrolledInclass.length >= classroom.capacity)
       throw new Error("Class is over capacity");
-    const existingEnrollment = this.enrollmentRepository.getByCpf(input.studentCpf);
+    const existingEnrollment = await this.enrollmentRepository.getByCpf(input.studentCpf);
     if (existingEnrollment) throw new Error("Enrollment with duplicated student is not allowed");
-    const enrollmentSequence = this.enrollmentRepository.count() + 1;
+    const enrollmentSequence = (await this.enrollmentRepository.count()) + 1;
     const issueDate = new Date();
     const enrollment = new Enrollment({
       student,
@@ -49,7 +49,7 @@ export default class EnrollStudentUsecase {
       sequence: enrollmentSequence,
       installments: input.installments,
     });
-    this.enrollmentRepository.save(enrollment);
+    await this.enrollmentRepository.save(enrollment);
 
     const output: EnrollmentStudentOutputDTO = { code: enrollment.code.value, invoices: [] };
     for (const invoice of enrollment.invoices) {

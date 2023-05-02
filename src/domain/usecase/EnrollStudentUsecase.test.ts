@@ -1,4 +1,4 @@
-import RepositoryMemoryFactory from "../repository/repositoryMemory/RepositoryMemoryFactory";
+import RepositoryMemoryFactory from "../../adapter/factory/RepositoryMemoryFactory";
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
@@ -10,7 +10,7 @@ beforeEach(() => {
   year = currentDate.getFullYear();
 });
 
-test("Não deve matricular sem um nome de estudante válido", () => {
+test("Não deve matricular sem um nome de estudante válido", async () => {
   const enrollmentRequest = {
     studentName: "Ana",
     studentCpf: "123.456.789-99",
@@ -20,12 +20,12 @@ test("Não deve matricular sem um nome de estudante válido", () => {
     classroom: "A",
     installments: 12,
   };
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(
+  await expect(() => enrollStudentUsecase.execute(enrollmentRequest)).rejects.toThrow(
     new Error("Invalid student name")
   );
 });
 
-test("Não deve matricular sem um cpf de estudante válido", () => {
+test("Não deve matricular sem um cpf de estudante válido", async () => {
   const enrollmentRequest = {
     studentName: "Ana Silva",
     studentCpf: "123.456.789-99",
@@ -35,10 +35,12 @@ test("Não deve matricular sem um cpf de estudante válido", () => {
     classroom: "A",
     installments: 12,
   };
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(new Error("Invalid cpf"));
+  await expect(() => enrollStudentUsecase.execute(enrollmentRequest)).rejects.toThrow(
+    new Error("Invalid cpf")
+  );
 });
 
-test("Não deve matricular um aluno duplicado", () => {
+test("Não deve matricular um aluno duplicado", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "864.464.227-84",
@@ -48,13 +50,13 @@ test("Não deve matricular um aluno duplicado", () => {
     classroom: "A",
     installments: 12,
   };
-  enrollStudentUsecase.execute(enrollmentRequest);
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(
+  await enrollStudentUsecase.execute(enrollmentRequest);
+  await expect(() => enrollStudentUsecase.execute(enrollmentRequest)).rejects.toThrow(
     new Error("Enrollment with duplicated student is not allowed")
   );
 });
 
-test("Deve gerar o código de matrícula", () => {
+test("Deve gerar o código de matrícula", async () => {
   const enrollmentRequest = {
     studentName: "Maria Carolina Fonseca",
     studentCpf: "755.525.774-26",
@@ -64,12 +66,12 @@ test("Deve gerar o código de matrícula", () => {
     classroom: "A",
     installments: 12,
   };
-  const enrollment = enrollStudentUsecase.execute(enrollmentRequest);
+  const enrollment = await enrollStudentUsecase.execute(enrollmentRequest);
 
   expect(enrollment.code).toBe(`${year}EM1A0001`);
 });
 
-test("Não deve matricular aluno abaixo da idade minima", () => {
+test("Não deve matricular aluno abaixo da idade minima", async () => {
   const enrollmentRequest = {
     studentName: "Maria Carolina Fonseca",
     studentCpf: "755.525.774-26",
@@ -80,12 +82,12 @@ test("Não deve matricular aluno abaixo da idade minima", () => {
     installments: 12,
   };
 
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(
+  await expect(() => enrollStudentUsecase.execute(enrollmentRequest)).rejects.toThrow(
     new Error("Student below minimum age")
   );
 });
 
-test("Não deve matricular aluno fora da capacidade da turma", () => {
+test("Não deve matricular aluno fora da capacidade da turma", async () => {
   const enrollmentRequestArray = [
     {
       studentName: "Maria Carolina Maia",
@@ -108,7 +110,7 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
   ];
 
   for (const enrollmentReq of enrollmentRequestArray) {
-    enrollStudentUsecase.execute(enrollmentReq);
+    await enrollStudentUsecase.execute(enrollmentReq);
   }
 
   const enrollmentRequest = {
@@ -121,12 +123,12 @@ test("Não deve matricular aluno fora da capacidade da turma", () => {
     installments: 12,
   };
 
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(
+  await expect(() => enrollStudentUsecase.execute(enrollmentRequest)).rejects.toThrow(
     new Error("Class is over capacity")
   );
 });
 
-test("Não deve matricular aluno apos o termino da turma", () => {
+test("Não deve matricular aluno apos o termino da turma", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -137,12 +139,12 @@ test("Não deve matricular aluno apos o termino da turma", () => {
     installments: 12,
   };
 
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(
+  await expect(() => enrollStudentUsecase.execute(enrollmentRequest)).rejects.toThrow(
     new Error("Class is already finished")
   );
 });
 
-test("Não deve matricular aluno apos 25% do inicio da turma", () => {
+test("Não deve matricular aluno apos 25% do inicio da turma", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -153,12 +155,12 @@ test("Não deve matricular aluno apos 25% do inicio da turma", () => {
     installments: 12,
   };
 
-  expect(() => enrollStudentUsecase.execute(enrollmentRequest)).toThrow(
+  await expect(() => enrollStudentUsecase.execute(enrollmentRequest)).rejects.toThrow(
     new Error("Class is already started")
   );
 });
 
-test("Deve gerar faturas", () => {
+test("Deve gerar faturas", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -168,7 +170,7 @@ test("Deve gerar faturas", () => {
     classroom: "A",
     installments: 12,
   };
-  const enrollment = enrollStudentUsecase.execute(enrollmentRequest);
+  const enrollment = await enrollStudentUsecase.execute(enrollmentRequest);
 
   expect(enrollment.invoices).toHaveLength(12);
   expect(enrollment.invoices[0].amount).toBe(1416.66);

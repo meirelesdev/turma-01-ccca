@@ -1,4 +1,4 @@
-import RepositoryMemoryFactory from "../repository/repositoryMemory/RepositoryMemoryFactory";
+import RepositoryMemoryFactory from "../../adapter/factory/RepositoryMemoryFactory";
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
 import GetEnrollmentUsecase from "./GetEnrollmentUsecase";
 
@@ -14,7 +14,7 @@ beforeEach(() => {
   year = currentDate.getFullYear();
 });
 
-test("Deve pegar uma matricula com saldo da fatura", () => {
+test("Deve pegar uma matricula com saldo da fatura", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -24,14 +24,17 @@ test("Deve pegar uma matricula com saldo da fatura", () => {
     classroom: "A",
     installments: 12,
   };
-  enrollStudentUsecase.execute(enrollmentRequest);
-  const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
+  await enrollStudentUsecase.execute(enrollmentRequest);
+  const enrollmentOutput = await getEnrollment.execute(
+    `${year}EM1A0001`,
+    new Date(`${year}-06-20`)
+  );
   expect(enrollmentOutput.code).toBe(`${year}EM1A0001`);
   expect(enrollmentOutput.balance).toBe(16999.99);
   expect(enrollmentOutput.status).toBe("active");
 });
 
-test("Deve calcular a data de vencimento e o status de retorno aberto ou vencido para cada fatura", () => {
+test("Deve calcular a data de vencimento e o status de retorno aberto ou vencido para cada fatura", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -41,9 +44,12 @@ test("Deve calcular a data de vencimento e o status de retorno aberto ou vencido
     classroom: "A",
     installments: 12,
   };
-  enrollStudentUsecase.execute(enrollmentRequest);
+  await enrollStudentUsecase.execute(enrollmentRequest);
 
-  const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
+  const enrollmentOutput = await getEnrollment.execute(
+    `${year}EM1A0001`,
+    new Date(`${year}-06-20`)
+  );
 
   expect(enrollmentOutput.code).toBe(`${year}EM1A0001`);
   expect(enrollmentOutput.status).toBe("active");
@@ -54,7 +60,7 @@ test("Deve calcular a data de vencimento e o status de retorno aberto ou vencido
   expect(enrollmentOutput.invoices[11].status).toBe(`open`);
 });
 
-test("Deve calcular multa e juros", () => {
+test("Deve calcular multa e juros", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -64,8 +70,11 @@ test("Deve calcular multa e juros", () => {
     classroom: "A",
     installments: 12,
   };
-  enrollStudentUsecase.execute(enrollmentRequest);
-  const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
+  await enrollStudentUsecase.execute(enrollmentRequest);
+  const enrollmentOutput = await getEnrollment.execute(
+    `${year}EM1A0001`,
+    new Date(`${year}-06-20`)
+  );
 
   expect(enrollmentOutput.code).toBe(`${year}EM1A0001`);
   expect(enrollmentOutput.status).toBe("active");

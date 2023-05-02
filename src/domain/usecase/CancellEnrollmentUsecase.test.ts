@@ -1,7 +1,7 @@
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
 import GetEnrollmentUsecase from "./GetEnrollmentUsecase";
 import CancellEnrollmentUsecase from "./CancellEnrollmentUsecase";
-import RepositoryMemoryFactory from "../repository/repositoryMemory/RepositoryMemoryFactory";
+import RepositoryMemoryFactory from "../../adapter/factory/RepositoryMemoryFactory";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
 let getEnrollment: GetEnrollmentUsecase;
@@ -17,7 +17,7 @@ beforeEach(() => {
   year = currentDate.getFullYear();
 });
 
-test("Deve cancelar uma matricula", () => {
+test("Deve cancelar uma matricula", async () => {
   const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
@@ -27,9 +27,12 @@ test("Deve cancelar uma matricula", () => {
     classroom: "A",
     installments: 12,
   };
-  enrollStudentUsecase.execute(enrollmentRequest);
-  cancellEnrollmentUsecase.execute(`${year}EM1A0001`);
-  const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
+  await enrollStudentUsecase.execute(enrollmentRequest);
+  await cancellEnrollmentUsecase.execute(`${year}EM1A0001`);
+  const enrollmentOutput = await getEnrollment.execute(
+    `${year}EM1A0001`,
+    new Date(`${year}-06-20`)
+  );
 
   expect(enrollmentOutput.status).toBe("cancelled");
 });
