@@ -1,5 +1,5 @@
-import Name from "./Name";
-import Cpf from "./Cpf";
+import Cpf from "../valueObject/Cpf";
+import Name from "../valueObject/Name";
 
 type StudentProps = {
   name: string;

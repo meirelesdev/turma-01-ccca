@@ -1,4 +1,4 @@
-import Clonable from "./Clonable";
+import Clonable from "../shared/Clonable";
 import InvoiceEvent from "./InvoiceEvent";
 
 export default class Invoice implements Clonable {

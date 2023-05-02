@@ -1,4 +1,4 @@
-import Module from "./Module";
+import Module from "../entity/Module";
 
 export default interface ModuleRepository {
   findByLevelAndCode(level: string, code: string): Module;

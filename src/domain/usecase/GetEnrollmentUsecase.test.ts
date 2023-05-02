@@ -1,6 +1,5 @@
-import { EnrollmentStudentInputDTO } from "./EnrollmentStudentDTO";
+import RepositoryMemoryFactory from "../repository/repositoryMemory/RepositoryMemoryFactory";
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
-import RepositoryMemoryFactory from "./RepositoryMemoryFactory";
 import GetEnrollmentUsecase from "./GetEnrollmentUsecase";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
@@ -16,7 +15,7 @@ beforeEach(() => {
 });
 
 test("Deve pegar uma matricula com saldo da fatura", () => {
-  const enrollmentRequest = new EnrollmentStudentInputDTO({
+  const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
     studentBirthDate: "2002-03-12",
@@ -24,7 +23,7 @@ test("Deve pegar uma matricula com saldo da fatura", () => {
     module: "1",
     classroom: "A",
     installments: 12,
-  });
+  };
   enrollStudentUsecase.execute(enrollmentRequest);
   const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
   expect(enrollmentOutput.code).toBe(`${year}EM1A0001`);
@@ -33,7 +32,7 @@ test("Deve pegar uma matricula com saldo da fatura", () => {
 });
 
 test("Deve calcular a data de vencimento e o status de retorno aberto ou vencido para cada fatura", () => {
-  const enrollmentRequest = new EnrollmentStudentInputDTO({
+  const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
     studentBirthDate: "2002-03-12",
@@ -41,7 +40,7 @@ test("Deve calcular a data de vencimento e o status de retorno aberto ou vencido
     module: "1",
     classroom: "A",
     installments: 12,
-  });
+  };
   enrollStudentUsecase.execute(enrollmentRequest);
 
   const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
@@ -56,7 +55,7 @@ test("Deve calcular a data de vencimento e o status de retorno aberto ou vencido
 });
 
 test("Deve calcular multa e juros", () => {
-  const enrollmentRequest = new EnrollmentStudentInputDTO({
+  const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
     studentBirthDate: "2002-03-12",
@@ -64,7 +63,7 @@ test("Deve calcular multa e juros", () => {
     module: "1",
     classroom: "A",
     installments: 12,
-  });
+  };
   enrollStudentUsecase.execute(enrollmentRequest);
   const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));
 

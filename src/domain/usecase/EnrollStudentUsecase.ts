@@ -1,16 +1,16 @@
-import classroomRepository from "./ClassroomRepository";
-import Enrollment from "./Enrollment";
-import EnrollmentRepository from "./EnrollmentRepository";
-import { EnrollmentStudentInputDTO, EnrollmentStudentOutputDTO } from "./EnrollmentStudentDTO";
-import LevelRepository from "./LevelRepository";
-import ModuleRepository from "./ModuleRepository";
-import RepositoryAbastractFactory from "./RepositoryAbastractFactory";
-import Student from "./Student";
+import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
+import Enrollment from "../entity/Enrollment";
+import Student from "../entity/Student";
+import ClassroomRepository from "../repository/ClassroomRepository";
+import EnrollmentRepository from "../repository/EnrollmentRepository";
+import LevelRepository from "../repository/LevelRepository";
+import ModuleRepository from "../repository/ModuleRepository";
+import { EnrollmentStudentInputDTO, EnrollmentStudentOutputDTO } from "./DTO/EnrollmentStudentDTO";
 
 export default class EnrollStudentUsecase {
   public levelRepository: LevelRepository;
   public moduleRepository: ModuleRepository;
-  public classroomRepository: classroomRepository;
+  public classroomRepository: ClassroomRepository;
   public enrollmentRepository: EnrollmentRepository;
 
   constructor(repositoryFactory: RepositoryAbastractFactory) {
@@ -50,10 +50,18 @@ export default class EnrollStudentUsecase {
       installments: input.installments,
     });
     this.enrollmentRepository.save(enrollment);
-    
-    const output = new EnrollmentStudentOutputDTO(enrollment.code.value);
+
+    const output: EnrollmentStudentOutputDTO = { code: enrollment.code.value, invoices: [] };
     for (const invoice of enrollment.invoices) {
-      output.invoices.push(invoice.clone());
+      const invoiceData = {
+        amount: invoice.amount,
+        status: invoice.getStatus(issueDate),
+        dueDate: invoice.dueDate,
+        penalty: invoice.getPenalty(issueDate),
+        interests: invoice.getInterests(issueDate),
+        balance: invoice.getBalance(),
+      };
+      output.invoices.push(invoiceData);
     }
     return output;
   }

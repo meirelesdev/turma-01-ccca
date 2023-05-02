@@ -1,12 +1,12 @@
-import RepositoryAbastractFactory from "./RepositoryAbastractFactory";
-import ClassroomRepository from "./ClassroomRepository";
 import ClassroomRepositoryMemory from "./ClassroomRepositoryMemory";
-import EnrollmentRepository from "./EnrollmentRepository";
-import LevelRepository from "./LevelRepository";
 import LevelRepositoryMemory from "./LevelRepositoryMemory";
-import ModuleRepository from "./ModuleRepository";
 import ModuleRepositoryMemory from "./ModuleRepositoryMemory";
 import EnrollmentRepositoryMemorySingleton from "./EnrollmentRepositoryMemorySingleton";
+import LevelRepository from "../LevelRepository";
+import RepositoryAbastractFactory from "../../factory/RepositoryAbastractFactory";
+import ModuleRepository from "../ModuleRepository";
+import ClassroomRepository from "../ClassroomRepository";
+import EnrollmentRepository from "../EnrollmentRepository";
 
 export default class RepositoryMemoryFactory implements RepositoryAbastractFactory {
   constructor() {

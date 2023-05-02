@@ -1,5 +1,5 @@
 import Classroom from "./Classroom";
-import EnrollmentCode from "./EnrollmentCode";
+import EnrollmentCode from "../valueObject/EnrollmentCode";
 import Invoice from "./Invoice";
 import InvoiceEvent from "./InvoiceEvent";
 import Level from "./Level";

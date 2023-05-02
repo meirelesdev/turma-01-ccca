@@ -1,6 +1,6 @@
-import EnrollmentRepository from "./EnrollmentRepository";
-import { PayInvoiceInputDTO } from "./PayInvoiceDTO";
-import RepositoryAbastractFactory from "./RepositoryAbastractFactory";
+import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
+import EnrollmentRepository from "../repository/EnrollmentRepository";
+import { PayInvoiceInputDTO } from "./DTO/PayInvoiceDTO";
 
 export default class PayInvoiceUsecase {
   public enrollmentRepository: EnrollmentRepository;

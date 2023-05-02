@@ -1,4 +1,4 @@
-import EnrollmentRepository from "./EnrollmentRepository";
+import EnrollmentRepository from "../EnrollmentRepository";
 import EnrollmentRepositoryMemory from "./EnrollmentRepositoryMemory";
 
 export default class EnrollmentRepositoryMemorySingleton {

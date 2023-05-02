@@ -1,8 +1,7 @@
-import { EnrollmentStudentInputDTO } from "./EnrollmentStudentDTO";
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
-import RepositoryMemoryFactory from "./RepositoryMemoryFactory";
 import GetEnrollmentUsecase from "./GetEnrollmentUsecase";
 import CancellEnrollmentUsecase from "./CancellEnrollmentUsecase";
+import RepositoryMemoryFactory from "../repository/repositoryMemory/RepositoryMemoryFactory";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
 let getEnrollment: GetEnrollmentUsecase;
@@ -19,7 +18,7 @@ beforeEach(() => {
 });
 
 test("Deve cancelar uma matricula", () => {
-  const enrollmentRequest = new EnrollmentStudentInputDTO({
+  const enrollmentRequest = {
     studentName: "Ana Maria",
     studentCpf: "297.788.214-61",
     studentBirthDate: "2002-03-12",
@@ -27,7 +26,7 @@ test("Deve cancelar uma matricula", () => {
     module: "1",
     classroom: "A",
     installments: 12,
-  });
+  };
   enrollStudentUsecase.execute(enrollmentRequest);
   cancellEnrollmentUsecase.execute(`${year}EM1A0001`);
   const enrollmentOutput = getEnrollment.execute(`${year}EM1A0001`, new Date(`${year}-06-20`));

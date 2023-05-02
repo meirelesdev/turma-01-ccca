@@ -1,5 +1,5 @@
-import EnrollmentRepository from "./EnrollmentRepository";
-import RepositoryAbastractFactory from "./RepositoryAbastractFactory";
+import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
+import EnrollmentRepository from "../repository/EnrollmentRepository";
 
 export default class CancellEnrollmentUsecase {
   public enrollmentRepository: EnrollmentRepository;

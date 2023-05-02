@@ -1,5 +1,5 @@
-import Enrollment from "./Enrollment";
-import EnrollmentRepository from "./EnrollmentRepository";
+import Enrollment from "../../entity/Enrollment";
+import EnrollmentRepository from "../EnrollmentRepository";
 
 export default class EnrollmentRepositoryMemory implements EnrollmentRepository {
   enrollments: Enrollment[];
