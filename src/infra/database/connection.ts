@@ -24,11 +24,11 @@ export default class Connection {
         return parseFloat(value);
       });
       Connection.instance = pgp({
-        user: "postgres",
-        database: "system",
+        user: "admin",
+        database: "admin",
         password: "123456",
         host: "localhost",
-        port: 5432,
+        port: 5440,
         max: 10,
         idleTimeoutMillis: 0,
       });

@@ -1,7 +1,7 @@
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
 import GetEnrollmentUsecase from "./GetEnrollmentUsecase";
 import CancellEnrollmentUsecase from "./CancellEnrollmentUsecase";
-import RepositoryMemoryFactory from "../../adapter/factory/RepositoryMemoryFactory";
+import RepositoryMemoryFactory from "../../adapter/factory/memory/RepositoryMemoryFactory";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
 let getEnrollment: GetEnrollmentUsecase;

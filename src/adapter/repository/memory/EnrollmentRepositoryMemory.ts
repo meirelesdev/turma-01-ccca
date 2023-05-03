@@ -6,8 +6,9 @@ export default class EnrollmentRepositoryMemory implements EnrollmentRepository 
   constructor() {
     this.enrollments = [];
   }
-  get(code: string): Promise<Enrollment | undefined> {
+  get(code: string): Promise<Enrollment> {
     const enrollment = this.enrollments.find((enrollment) => enrollment.code.value === code);
+    if (!enrollment) throw new Error(`Enrollment not found`);
     return Promise.resolve(enrollment);
   }
   async save(enrollment: Enrollment): Promise<void> {

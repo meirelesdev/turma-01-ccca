@@ -1,18 +1,14 @@
 import Level from "../../../domain/entity/Level";
 import LevelRepository from "../../../domain/repository/LevelRepository";
+import Connection from "../../../infra/database/connection";
 
 export default class LevelRepositoryDatabase implements LevelRepository {
-  levels: Level[];
-  constructor() {
-    this.levels = [
-      new Level({ code: "EF1", description: "Ensino Fundamental I" }),
-      new Level({ code: "EF2", description: "Ensino Fundamental II" }),
-      new Level({ code: "EM", description: "Ensino Médio" }),
-    ];
-  }
-  findByCode(code: string): Promise<Level> {
-    const level = this.levels.find((level) => level.code === code);
-    if (!level) throw new Error("Level not found");
-    return Promise.resolve(level);
+  async findByCode(code: string): Promise<Level> {
+    const levelData = await Connection.query("SELECT * FROM system.level WHERE code = $1", [code]);
+    if (!levelData) throw new Error("Level not found");
+    return new Level({
+      code: levelData.code,
+      description: levelData.description,
+    });
   }
 }

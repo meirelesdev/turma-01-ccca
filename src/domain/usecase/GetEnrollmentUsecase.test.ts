@@ -1,4 +1,4 @@
-import RepositoryMemoryFactory from "../../adapter/factory/RepositoryMemoryFactory";
+import RepositoryMemoryFactory from "../../adapter/factory/memory/RepositoryMemoryFactory";
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
 import GetEnrollmentUsecase from "./GetEnrollmentUsecase";
 

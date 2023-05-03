@@ -14,6 +14,7 @@ type EnrollmentProps = {
   issueDate: Date;
   sequence: number;
   installments: number;
+  status?: string;
 };
 
 export default class Enrollment {
@@ -36,6 +37,7 @@ export default class Enrollment {
     issueDate,
     sequence,
     installments = 12,
+    status = "active",
   }: EnrollmentProps) {
     if (student.getAge() < module.minimumAge) throw new Error("Student below minimum age");
     if (classroom.isFinished(issueDate)) throw new Error("Class is already finished");
@@ -49,7 +51,7 @@ export default class Enrollment {
     this.issueDate = issueDate;
     this.code = new EnrollmentCode(level.code, module.code, classroom.code, issueDate, sequence);
     this.invoices = [];
-    this.status = "active";
+    this.status = status;
     this.generateInvoices();
   }
 

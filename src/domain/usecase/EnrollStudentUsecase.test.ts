@@ -1,11 +1,12 @@
-import RepositoryMemoryFactory from "../../adapter/factory/RepositoryMemoryFactory";
+import RepositoryMemoryFactory from "../../adapter/factory/memory/RepositoryMemoryFactory";
 import EnrollStudentUsecase from "./EnrollStudentUsecase";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
 let year: number;
 
 beforeEach(() => {
-  enrollStudentUsecase = new EnrollStudentUsecase(new RepositoryMemoryFactory());
+  const repositoryMemoryFactory = new RepositoryMemoryFactory();
+  enrollStudentUsecase = new EnrollStudentUsecase(repositoryMemoryFactory);
   const currentDate = new Date();
   year = currentDate.getFullYear();
 });
