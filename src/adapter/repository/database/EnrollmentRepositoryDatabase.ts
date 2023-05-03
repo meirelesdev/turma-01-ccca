@@ -12,7 +12,6 @@ export default class EnrollmentRepositoryDatabase implements EnrollmentRepositor
   levelRepository: LevelRepositoryDatabase;
   moduleRepository: ModuleRepositoryDatabase;
   classroomRepository: ClassroomRepositoryDatabase;
-  enrollments: any;
   constructor() {
     this.levelRepository = new LevelRepositoryDatabase();
     this.moduleRepository = new ModuleRepositoryDatabase();
@@ -72,6 +71,7 @@ export default class EnrollmentRepositoryDatabase implements EnrollmentRepositor
     enrollment.invoices = invoices;
     return enrollment;
   }
+
   async save(enrollment: Enrollment): Promise<void> {
     await Connection.one(
       "INSERT INTO system.enrollment (code, sequence, level, module, classroom, student, installments, issue_date, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *",
@@ -98,6 +98,28 @@ export default class EnrollmentRepositoryDatabase implements EnrollmentRepositor
       );
     }
   }
+
+  async update(enrollment: Enrollment): Promise<void> {
+    await Connection.none("update system.enrollment set status = $1 where code = $2", [
+      enrollment.status,
+      enrollment.code.value,
+    ]);
+    for (const invoice of enrollment.invoices) {
+      for (const invoiceEvent of invoice.events) {
+        await Connection.none(
+          "insert into system.invoice_event (enrollment, month, year, type, amount) values ($1, $2, $3, $4, $5) on conflict do nothing",
+          [
+            enrollment.code.value,
+            invoice.month,
+            invoice.year,
+            invoiceEvent.type,
+            invoiceEvent.amount,
+          ]
+        );
+      }
+    }
+  }
+
   async findAllByClass(level: string, module: string, classroom: string): Promise<Enrollment[]> {
     const enrollmentsData = await Connection.query(
       "SELECT * FROM system.enrollment WHERE level = $1 AND module = $2 AND classroom = $3",
@@ -110,6 +132,7 @@ export default class EnrollmentRepositoryDatabase implements EnrollmentRepositor
     }
     return enrollments;
   }
+
   async getByCpf(cpf: string): Promise<Enrollment | undefined> {
     const enrollmentData = await Connection.oneOrNone(
       "SELECT * FROM system.enrollment WHERE student = $1",
@@ -123,6 +146,7 @@ export default class EnrollmentRepositoryDatabase implements EnrollmentRepositor
     const enrollments = await Connection.one("SELECT count(*) FROM system.enrollment", []);
     return enrollments.count;
   }
+
   async clean(): Promise<void> {
     await Connection.query("DELETE FROM system.invoice_event", []);
     await Connection.query("DELETE FROM system.invoice", []);
