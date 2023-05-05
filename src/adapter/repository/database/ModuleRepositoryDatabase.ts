@@ -4,7 +4,7 @@ import Connection from "../../../infra/database/connection";
 
 export default class ModuleRepositoryDatabase implements ModuleRepository {
   async findByLevelAndCode(level: string, code: string): Promise<Module> {
-    const moduleData = await Connection.query(
+    const moduleData = await Connection.oneOrNone(
       "SELECT * FROM system.module WHERE level = $1 AND code = $2",
       [level, code]
     );

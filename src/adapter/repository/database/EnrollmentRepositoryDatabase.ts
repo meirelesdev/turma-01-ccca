@@ -25,7 +25,7 @@ export default class EnrollmentRepositoryDatabase implements EnrollmentRepositor
     );
     if (!enrollmentData) throw new Error("Enrollment not found");
     const studentData = await Connection.one("SELECT * FROM system.student WHERE cpf = $1", [
-      enrollmentData.cpf,
+      enrollmentData.student,
     ]);
     if (!studentData) throw new Error("Student not found");
     const student = new Student({

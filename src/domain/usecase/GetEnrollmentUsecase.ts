@@ -3,7 +3,7 @@ import EnrollmentRepository from "../repository/EnrollmentRepository";
 import { GetEnrollmentOutputDTO } from "./DTO/GetEnrollmentDTO";
 import { InvoiceOutputDTO } from "./DTO/PayInvoiceDTO";
 
-export default class GetEnrollUsecase {
+export default class GetEnrollmentUsecase {
   public enrollmentRepository: EnrollmentRepository;
 
   constructor(repositoryFactory: RepositoryAbastractFactory) {
