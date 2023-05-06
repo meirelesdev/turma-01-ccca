@@ -11,7 +11,11 @@ export default class Router {
     const router = express.Router({ mergeParams: true });
     const securityController = new SecurityController(repositoryFactory);
     const enrollmentController = new EnrollmentController(repositoryFactory);
-    router.post("/login", securityController.login.bind(enrollmentController));
+
+    router.post(
+      "/login",
+      ExpressConvert.execute(securityController.login.bind(securityController))
+    );
 
     router.all(
       "*",

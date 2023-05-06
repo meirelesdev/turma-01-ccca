@@ -1,6 +1,6 @@
 import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
 import EnrollmentRepository from "../repository/EnrollmentRepository";
-import { GetEnrollmentOutputDTO } from "./DTO/GetEnrollmentDTO";
+import { GetEnrollmentsOutputDTO } from "./DTO/GetEnrollmentsDTO";
 import { InvoiceOutputDTO } from "./DTO/PayInvoiceDTO";
 
 export default class GetEnrollmentsUsecase {
@@ -10,15 +10,21 @@ export default class GetEnrollmentsUsecase {
     this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
   }
 
-  async execute(currentDate: Date): Promise<GetEnrollmentOutputDTO[]> {
+  async execute(currentDate: Date): Promise<GetEnrollmentsOutputDTO[]> {
     const enrollments = await this.enrollmentRepository.getAll();
     const output = [];
 
     for (const enrollment of enrollments) {
       const balance = enrollment.getInvoiceBalance();
-      const outputData: GetEnrollmentOutputDTO = {
+      const outputData: GetEnrollmentsOutputDTO = {
         code: enrollment.code.value,
         balance,
+        studentName: enrollment.student.name.value,
+        studentBirthDate: enrollment.student.birthDate.toISOString(),
+        studentCpf: enrollment.student.cpf.value,
+        levelDescription: enrollment.level.description,
+        moduleDescription: enrollment.module.description,
+        classroomCode: enrollment.classroom.code,
         status: enrollment.status,
         invoices: [],
       };

@@ -13,9 +13,16 @@ export default class EnrollmentController {
 
   async getEnrollments(_params: any, body: any): Promise<GetEnrollmentOutputDTO[]> {
     const currentDate = body.currentDate || new Date();
-    console.log(body);
     const getEnrollments = new GetEnrollmentsUsecase(this.repositoryFactory);
     const output = await getEnrollments.execute(currentDate);
+    return output;
+  }
+
+  async getEnrollment(params: any, body: any): Promise<GetEnrollmentOutputDTO> {
+    const code = params.code;
+    const currentDate = body.currentDate || new Date();
+    const getEnrollment = new GetEnrollmentUsecase(this.repositoryFactory);
+    const output = await getEnrollment.execute(code, currentDate);
     return output;
   }
 
@@ -29,13 +36,11 @@ export default class EnrollmentController {
     return output;
   }
 
-  async getEnrollment(params: any, body: any): Promise<GetEnrollmentOutputDTO> {
+  async cancelEnrollment(params: any): Promise<void> {
     const code = params.code;
-    const currentDate = body.currentDate || new Date();
-    console.log(body);
-    const getEnrollment = new GetEnrollmentUsecase(this.repositoryFactory);
-    const output = await getEnrollment.execute(code, currentDate);
-    return output;
+    const cancelEnrollment = new CancelEnrollmentUsecase(this.repositoryFactory);
+    await cancelEnrollment.execute(code);
+    return;
   }
 
   async payInvoice(params: any, body: any): Promise<void> {
@@ -46,11 +51,6 @@ export default class EnrollmentController {
       ...input,
       code,
     });
-  }
-
-  async cancelEnrollment(params: any): Promise<void> {
-    const code = params.code;
-    const cancelEnrollment = new CancelEnrollmentUsecase(this.repositoryFactory);
-    await cancelEnrollment.execute(code);
+    return;
   }
 }
