@@ -1,11 +1,11 @@
 import EnrollStudentUsecase from "../../domain/usecase/EnrollStudentUsecase";
 import GetEnrollmentUsecase from "../../domain/usecase/GetEnrollmentUsecase";
-import CancellEnrollmentUsecase from "../../domain/usecase/CancellEnrollmentUsecase";
+import CancelEnrollmentUsecase from "../../domain/usecase/CancelEnrollmentUsecase";
 import RepositoryMemoryFactory from "../../adapter/factory/memory/RepositoryMemoryFactory";
 
 let enrollStudentUsecase: EnrollStudentUsecase;
 let getEnrollment: GetEnrollmentUsecase;
-let cancellEnrollmentUsecase: CancellEnrollmentUsecase;
+let cancellEnrollmentUsecase: CancelEnrollmentUsecase;
 let year: number;
 
 describe("Cancel Enrollment Test", function () {
@@ -13,7 +13,7 @@ describe("Cancel Enrollment Test", function () {
     const repositoryMemoryFactory = new RepositoryMemoryFactory();
     enrollStudentUsecase = new EnrollStudentUsecase(repositoryMemoryFactory);
     getEnrollment = new GetEnrollmentUsecase(repositoryMemoryFactory);
-    cancellEnrollmentUsecase = new CancellEnrollmentUsecase(repositoryMemoryFactory);
+    cancellEnrollmentUsecase = new CancelEnrollmentUsecase(repositoryMemoryFactory);
     const currentDate = new Date();
     year = currentDate.getFullYear();
   });

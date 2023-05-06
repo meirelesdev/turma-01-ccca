@@ -7,4 +7,5 @@ export default interface EnrollmentRepository {
   getByCpf(value: string): Promise<Enrollment | undefined>;
   get(code: string): Promise<Enrollment>;
   count(): Promise<number>;
+  getAll(): Promise<Enrollment[]>;
 }

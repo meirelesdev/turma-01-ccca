@@ -1,7 +1,7 @@
 import RepositoryAbastractFactory from "../factory/RepositoryAbastractFactory";
 import EnrollmentRepository from "../repository/EnrollmentRepository";
 
-export default class CancellEnrollmentUsecase {
+export default class CancelEnrollmentUsecase {
   public enrollmentRepository: EnrollmentRepository;
 
   constructor(repositoryFactory: RepositoryAbastractFactory) {
