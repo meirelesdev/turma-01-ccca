@@ -29,7 +29,9 @@ export default class GetEnrollmentsUsecase {
         invoices: [],
       };
       for (const invoice of enrollment.invoices) {
-        const invoiceData: InvoiceOutputDTO = {
+        const invoiceData = {
+          month: invoice.month,
+          year: invoice.year,
           amount: invoice.amount,
           status: invoice.getStatus(currentDate),
           dueDate: invoice.dueDate,

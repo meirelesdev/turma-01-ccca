@@ -45,12 +45,12 @@ export default class EnrollmentController {
 
   async payInvoice(params: any, body: any): Promise<void> {
     const code = params.code;
-    const input = { ...body };
+    const paymentDate = new Date(body.paymentDate);
+    const month = Number(body.month);
+    const year = Number(body.year);
+    const input = { code, month, year, amount: body.amount, paymentDate };
     const payInvoice = new PayInvoiceUsecase(this.repositoryFactory);
-    await payInvoice.execute({
-      ...input,
-      code,
-    });
+    await payInvoice.execute(input);
     return;
   }
 }
